@@ -1,0 +1,57 @@
+@font-face {
+  font-family: "ElectricalSafety-Regular";
+  src: url(../fonts/Electrical\ Safety\ Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "ElectricalSafety-Bold";
+  src: url(../fonts/Electrical\ Safety\ Bold.ttf);
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+button {
+  font-family: "ElectricalSafety-Regular";
+}
+
+body {
+  background-color: rgba(250, 235, 215, 0.6);
+  font-family: "ElectricalSafety-Regular";
+  -ms-overflow-style: none;
+  padding-top: 80px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+  border-width: 0;
+}
+
+input:focus {
+  outline: none;
+}
