@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 function InputForm() {
 
   let [progress, setProgress] = useState(0);
-  let [resultProgress, setResultProgress] = useState(0);  
+  let [textSelect, setTextSelect] = useState(3);  
   let [credit, setCredit] = useState([0, 0, 0, 0, 0, 0, 0]);
   let [result, setResult] = useState([0, 0, 0, 0, 0, 0, 0]);
   let [require, setRequire] = useState([17, 15, 12, 9, 33, 27, 17]);
@@ -102,7 +102,6 @@ function InputForm() {
     }
 
     setRequire(copy[index]);
-    console.log(require);
   }, [curriculum, major, majorType])
 
   function calculate() {
@@ -159,7 +158,7 @@ function InputForm() {
     <>
     {
       progress < 2 ?
-      <div className="container">
+      <div className={progress < 2 ? "container show" : "container"}>
           <form>
               <div className="select-div">
                   <div>
@@ -186,17 +185,17 @@ function InputForm() {
                       } */}
                       {
                         progress > 0 ?
-                        <Button variant="secondary" className="btn" onClick={() => {setProgress(progress-1);}}>이전</Button>
+                        <Button variant="secondary" className="btn-location" onClick={() => {setProgress(progress-1);}}>이전</Button>
                         : null
                       }
                       {
                         progress < 1 ?
-                        <Button variant="secondary" className="next-btn btn" onClick={() => {setProgress(progress+1);}}>다음</Button>
+                        <Button variant="secondary" className="next-btn btn-location" onClick={() => {setProgress(progress+1);}}>다음</Button>
                         : null
                       }
                       {
                         progress == 1 ?
-                        <Button variant="success" className="next-btn btn" onClick={() => {setProgress(progress+1); calculate();}}>완료</Button>
+                        <Button variant="success" className="next-btn btn-location" onClick={() => {setProgress(progress+1); calculate();}}>완료</Button>
                         : null
                       }
                     </div>
@@ -211,7 +210,7 @@ function InputForm() {
             <p>졸업학점</p>
             <table>
               <tr>
-                <th>이수구분</th>
+                <th>영역구분</th>
                 <th>인정학점</th>
                 <th>필요학점</th>
               </tr>
@@ -227,11 +226,63 @@ function InputForm() {
                 })
               }
             </table>
-            <Button variant="secondary" style={{width: '10%'}} onClick={() => {setProgress(0);}}>수정</Button>
+            <Button variant="secondary" onClick={() => {setProgress(0);}}>수정</Button>
           </div>
         </div>
-        <div className="text-info">
-          asd
+        <div className="other-info">
+          <div className="info-radio">
+            <h4>졸업요건</h4>
+            <div><input type="radio" name="text-select" value={1} onClick={(e) => {setTextSelect(e.target.value)}}/> 캡스톤디자인 과제 참여</div>
+            <h5><br/>졸업논문 유형(택1)</h5>
+             <div><input type="radio" name="text-select" value={2} onClick={(e) => {setTextSelect(e.target.value)}}/> 산학협력프로젝트 결과보고서</div>
+             <div><input type="radio" name="text-select" value={3} onClick={(e) => {setTextSelect(e.target.value)}}/> 정보처리기사 자격증</div>
+             <div><input type="radio" name="text-select" value={4} onClick={(e) => {setTextSelect(e.target.value)}}/> 취업보고서</div>
+            {
+              major == 1 ?
+              <>
+                <div><input type="radio" name="text-select" value={5} onClick={(e) => {setTextSelect(e.target.value)}}/> 학술논문</div>
+                <div><input type="radio" name="text-select" value={6} onClick={(e) => {setTextSelect(e.target.value)}}/> 졸업종합시험</div>
+              </>
+              : null
+            }
+            { major == 2 ? <div><input type="radio" name="text-select" value={6} onClick={(e) => {setTextSelect(e.target.value)}}/> 졸업종합시험</div>: null }
+            { major == 3 ? <div><input type="radio" name="text-select" value={5} onClick={(e) => {setTextSelect(e.target.value)}}/> 학술논문</div>: null }
+          </div>
+          <div className="dark-box">
+            {
+              textSelect == 0 ?
+              null
+              : textSelect == 1 ?
+              <p>졸업 예정자는 졸업논문 통과 신청을 하기 위해 캡스톤디자인 과제를 수행하였거나 수행중이어야 한다.</p>
+              : textSelect == 2 ?
+              <p>
+                산학협력프로젝트 결과보고서로 졸업논문을 통과하고자 하는 경우, 본인이 수행한 산학협력프로젝트 관련 주제로 개인별 보고서를 작성하여 제출해야 한다.<br/>
+                산학협력프로젝트 결과보고서는 지도교수의 심사를 통과한 후 졸업예정학기 종강 1주일 전까지 학과에 제출하여야 한다.
+              </p>
+              : textSelect == 3 ?
+              <p>
+                정보처리기사 자격을 취득하여 졸업종합시험 면제신청서를 제출하는경우 졸업논문을 통과한 것으로 본다.<br/>
+                정보처리기사 자격 취득으로 졸업논문 통과 인정을 받고자 하는 경우, 졸업종합시험 면제신청서를 졸업예정학기 종강 1주일 전까지 학과에 제출하여야 한다.
+              </p>
+              : textSelect == 4 ?
+              <p>
+                졸업예정자 중 취업하여 3개월 이상 재직 중인 경우, 취업보고서를 제출하여 졸업논문 통과 신청을 할 수 있다.<br/>
+                취업보고서로 졸업논문 통과 인정을 받고자 하는 경우, 취업보고서를 작성하여 졸업예정학기 종강 14일 전까지 학과로 제출하며, 통과 여부는 학과장이 결정한다.
+              </p>
+              : textSelect == 5 ?
+              <p>
+                지도교수의 지도를 받아 한국연구재단등재후보지 이상 전공 분야 논문지에 출판하거나(출판확정 포함),
+                 한국연구재단등재후보지 이상 논문지를 발행하는 전공분야 학회에서 주최하는 학술대회에서 공개 발표하는 경우 졸업논문 통과 신청을 할 수 있다. 단, 두 경우 모두 신청자가 제 1저자이어야 한다.<br/>
+                위의 논문으로 졸업논문 통과 신청을 하고자 하는 경우, 논문집 표지, 목차, 논문 사본을 졸업예정학기 종강 1주일 전까지 학과에 제출하여야 한다.
+              </p>
+              : textSelect == 6 ?
+              <p>
+                졸업종합시험은 학과 전임교원 3인 이상의 졸업시험관리위원회를 구성하여, 시험과목, 출제위원, 기타 세부 운영계획을 수립하고 시험일 30일 전까지 졸업예정자에게 공지하여야 한다.<br/>
+                졸업종합시험 성적은 100점 만점에 평균 60점 이상을 합격으로 하며, 40점 미만은 과락으로 한다.
+              </p>
+              : null
+            }
+          </div>
         </div>
       </div>
     }
@@ -255,14 +306,14 @@ function UserInfo(props) {
       </div>
       <div className="radio">
         <p>학과</p>
-        <div><input type="radio" name="major" value="1" onClick={(e) => {props.setMajor(parseInt(e.target.value))}} checked/> 컴퓨터공학과</div>
+        <div><input type="radio" name="major" value="1" onClick={(e) => {props.setMajor(parseInt(e.target.value))}}/> 컴퓨터공학과</div>
         <div><input type="radio" name="major" value="2" onClick={(e) => {props.setMajor(parseInt(e.target.value))}}/> 컴퓨터과학전공</div>
         <div><input type="radio" name="major" value="3" onClick={(e) => {props.setMajor(parseInt(e.target.value))}}/> 컴퓨터정보통신공학전공</div>
       </div>
       <div>
         <p>전공유형</p>
         <div className="radio">
-          <div><input type="radio" name="major-select" value="1" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}} checked/> <span>주전공</span></div>
+          <div><input type="radio" name="major-select" value="1" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}}/> <span>주전공</span></div>
           <div><input type="radio" name="major-select" value="2" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}}/> <span>복수전공</span></div>
           <div><input type="radio" name="major-select" value="3" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}}/> <span>부전공</span></div>
         </div>
@@ -316,35 +367,6 @@ function Checklist() {
       <div className="radio">
         <p>캡스톤프로젝트 참여 여부</p>
         <div></div>
-      </div>
-    </>
-  )
-}
-
-function ResultPage(props) {
-  return (
-    <>
-      <ProgressBar striped variant="info" now={20} />
-      <div className="result-box mt-4">
-        <p>졸업학점</p>
-        <table>
-          <tr>
-            <th>이수구분</th>
-            <th>인정학점</th>
-            <th>필요학점</th>
-          </tr>
-          {
-            props.result.map(function(data, i) {
-              return (
-                <tr key={ i }>
-                  <td>{props.titleList[i]}</td>
-                  <td className="user-credit">{data}</td>
-                  <td>{props.require[i]}</td>
-                </tr>
-              )
-            })
-          }
-        </table>
       </div>
     </>
   )
