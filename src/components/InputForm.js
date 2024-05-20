@@ -1,42 +1,242 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/InputForm.css'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Button from 'react-bootstrap/Button';
-// import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function InputForm() {
 
   let [progress, setProgress] = useState(0);
+  let [resultProgress, setResultProgress] = useState(0);  
+  let [credit, setCredit] = useState([0, 0, 0, 0, 0, 0, 0]);
+  let [result, setResult] = useState([0, 0, 0, 0, 0, 0, 0]);
+  let [require, setRequire] = useState([17, 15, 12, 9, 33, 27, 17]);
+  let [curriculum, setCurriculum] = useState(22);
+  let [major, setMajor] = useState(1);
+  let [majorType, setMajorType] = useState(1);
+  let titleList = ["기초교양", "균형교양", "학문기초", "전공필수", "전공선택", "심화전공", "자유선택"]
 
-    return (
-        <div className="container">
-            <form>
-                <div className="select-div">
-                    <div>
-                      <ProgressBar animated variant="warning" now={(progress / 2) * 100} />
-                    </div>
+  useEffect(() => {
+    const copy = [[7, 13, 9, 12, 30, 27, 32],   //17컴과, 컴정 0
+                [7, 13, 18, 12, 30, 27, 23],  //18컴과 1
+                [7, 13, 18, 9, 33, 27, 23],   //18컴정 2
+                [10, 13, 18, 12, 30, 27, 20], //19컴과, 20 3
+                [10, 13, 18, 9, 33, 27, 20],  //19컴정, 21 4
+                [17, 15, 12, 9, 33, 27, 17],  //22~ 5
+                [7, 13, 9, 12, 30, 0, 59],    //17컴과, 컴정 복전 6
+                [7, 13, 18, 12, 30, 0, 50],   //18컴과 복전 7
+                [7, 13, 18, 9, 33, 0, 50],    //18컴정 복전 8
+                [10, 13, 18, 12, 30, 0, 47],  //19컴과 복전, 20 복전  9
+                [10, 13, 18, 9, 33, 0, 47],   //19컴정 복전, 21 복전 10
+                [10, 13, 18, 12, 30, 12, 35], //20 부전 11
+                [10, 13, 18, 9, 33, 12, 35],  //21 부전 12
+                [17, 15, 12, 9, 33, 0, 44],   //22~ 복전 13
+                [17, 15, 12, 9, 33, 12, 32]   //22~ 부전 14
+              ]
+
+    let index;
+
+    switch(curriculum) {
+      case 17:
+        if(majorType == 1)
+          index = 0;
+        else if(majorType == 2)
+          index = 6;
+        break;
+      case 18:
+        if(major == 2) {
+          if(majorType == 1)
+            index = 1;
+          else if(majorType == 2)
+            index = 7;
+        }
+        else if(major == 3) {
+          if(majorType == 1)
+            index = 2;
+          else if(majorType == 2)
+            index = 8;
+        }
+        break;
+      case 19:
+        if(major == 2) {
+          if(majorType == 1)
+            index = 3;
+          else if(majorType == 2)
+            index = 9;
+        }
+        else if(major == 3) {
+          if(majorType == 1)
+            index = 4;
+          else if(majorType == 2)
+            index = 10;
+        }
+        break;
+      case 20:
+        if(majorType == 1)
+          index = 3;
+        else if(majorType == 2)
+          index = 9;
+        else if(majorType == 3)
+          index = 11;
+        break;
+      case 21:
+        if(majorType == 1)
+          index = 4;
+        else if(majorType == 2)
+          index = 10;
+        else if(majorType == 2)
+          index = 12;
+        break;
+      case 22:
+        if(majorType == 1)
+          index = 5;
+        else if(majorType == 2)
+          index = 13;
+        else if(majorType == 3)
+          index = 14;
+        break;
+      default:
+        index = 0;
+        break;
+    }
+
+    setRequire(copy[index]);
+    console.log(require);
+  }, [curriculum, major, majorType])
+
+  function calculate() {
+    let tempResult = [...credit];
+    let overCredit = 0;
+
+    // 교양 초과학점 계산
+    for(let i = 0; i < 3; i++) {
+      if(tempResult[i] > require[i]) {
+        overCredit += tempResult[i] - require[i];
+        tempResult[i] = require[i];
+      }
+    }
+    // 교양 초과학점 -> 자선
+    if(overCredit > 10)
+      overCredit = 10;
+    if(overCredit != 0)
+      tempResult[6] = tempResult[6] + overCredit;
+    
+    // 전공 초과학점 계산
+    overCredit = 0;
+    for(let i = 3; i < 6; i++) {
+      // 전필, 전선 -> 심화
+      if(i < 5) {
+        if(tempResult[i] > require[i]) {
+          overCredit += tempResult[i] - require[i];
+          tempResult[i] = require[i];
+        }
+      }
+      else {
+        if(overCredit != 0)
+          tempResult[i] = tempResult[i] + overCredit;
+        // 심화 초과학점 -> 자선
+        overCredit = 0;
+        if(tempResult[i] > require[i]) {
+          overCredit += tempResult[i] - require[i];
+          tempResult[i] = require[i];
+        }
+      }
+    }
+
+    if (overCredit != 0) {
+      if (tempResult[6] + overCredit > require[6]) {
+        tempResult[6] = require[6];
+      } else {
+        tempResult[6] = tempResult[6] + overCredit;
+      }
+    }
+
+    setResult(tempResult);
+  } 
+
+  return (
+    <>
+    {
+      progress < 2 ?
+      <div className="container">
+          <form>
+              <div className="select-div">
+                  <div>
+                    {
+                      progress != 2 ?
+                      <ProgressBar animated variant="warning" now={(progress / 1) * 100} />
+                      : null
+                    }
+                  </div>
+                  <form>
                     <div className="slide">
                       {
-                        progress == 0 ? <UserInfo /> : null
-                      }
-                    
-                      {
-                        progress == 1 ? <CreditInfo /> : null
-                      }
-
-                      {
-                        progress > 0 ?
-                        <Button variant="secondary" className="prev-btn" onClick={() => {setProgress(progress-1);}}>이전</Button>
+                        progress == 0 ? 
+                        <UserInfo curriculum={curriculum} setCurriculum={setCurriculum} major={major} setMajor={setMajor}
+                        majorType={majorType} setMajorType={setMajorType}/> 
                         : null
                       }
-                      <Button variant="secondary" className="next-btn" onClick={() => {setProgress(progress+1)}}>다음</Button>{' '}
+                      {
+                        progress == 1 ? <CreditInfo credit={credit} setCredit={setCredit}/> : null
+                      }
+                      {/* {
+                        progress == 2 ? 
+                        <ResultPage result={result} titleList={titleList} require={require}/> : null
+                      } */}
+                      {
+                        progress > 0 ?
+                        <Button variant="secondary" className="btn" onClick={() => {setProgress(progress-1);}}>이전</Button>
+                        : null
+                      }
+                      {
+                        progress < 1 ?
+                        <Button variant="secondary" className="next-btn btn" onClick={() => {setProgress(progress+1);}}>다음</Button>
+                        : null
+                      }
+                      {
+                        progress == 1 ?
+                        <Button variant="success" className="next-btn btn" onClick={() => {setProgress(progress+1); calculate();}}>완료</Button>
+                        : null
+                      }
                     </div>
-                </div>
-            </form> 
+                  </form>
+              </div>
+          </form> 
+      </div>
+      :
+      <div className="result-container">
+        <div className="credit-info">
+          <div className="result-box">
+            <p>졸업학점</p>
+            <table>
+              <tr>
+                <th>이수구분</th>
+                <th>인정학점</th>
+                <th>필요학점</th>
+              </tr>
+              {
+                result.map(function(data, i) {
+                  return (
+                    <tr key={ i }>
+                      <td>{titleList[i]}</td>
+                      <td className="user-credit">{data}</td>
+                      <td>{require[i]}</td>
+                    </tr>
+                  )
+                })
+              }
+            </table>
+            <Button variant="secondary" style={{width: '10%'}} onClick={() => {setProgress(0);}}>수정</Button>
+          </div>
         </div>
-    )
+        <div className="text-info">
+          asd
+        </div>
+      </div>
+    }
+    </>
+  )
 }
 
 function UserInfo(props) {
@@ -44,7 +244,7 @@ function UserInfo(props) {
     <div className="user-info">
       <div>
         <p>학번</p>
-        <select>
+        <select onChange={(e) => {props.setCurriculum(parseInt(e.target.value));}}>
           <option value={17}>2017</option>
           <option value={18}>2018</option>
           <option value={19}>2019</option>
@@ -53,50 +253,100 @@ function UserInfo(props) {
           <option value={22} selected>2022~24</option>
         </select>
       </div>
-      <div>
-        <p>학년</p>
-        <select>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-        </select>
-      </div>
-      <div>
-        <p>학기</p>
-        <select>
-          <option>1</option>
-          <option>2</option>
-        </select>
+      <div className="radio">
+        <p>학과</p>
+        <div><input type="radio" name="major" value="1" onClick={(e) => {props.setMajor(parseInt(e.target.value))}} checked/> 컴퓨터공학과</div>
+        <div><input type="radio" name="major" value="2" onClick={(e) => {props.setMajor(parseInt(e.target.value))}}/> 컴퓨터과학전공</div>
+        <div><input type="radio" name="major" value="3" onClick={(e) => {props.setMajor(parseInt(e.target.value))}}/> 컴퓨터정보통신공학전공</div>
       </div>
       <div>
         <p>전공유형</p>
-        <div className="major-radio">
-          <div><input type="radio" name="major-select" value="1"/> <span>주전공</span></div>
-          <div><input type="radio" name="major-select" value="2"/> <span>복수전공</span></div>
-          <div><input type="radio" name="major-select" value="3"/> <span>부전공</span></div>
+        <div className="radio">
+          <div><input type="radio" name="major-select" value="1" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}} checked/> <span>주전공</span></div>
+          <div><input type="radio" name="major-select" value="2" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}}/> <span>복수전공</span></div>
+          <div><input type="radio" name="major-select" value="3" onClick={(e) => {props.setMajorType(parseInt(e.target.value))}}/> <span>부전공</span></div>
         </div>
       </div>
    </div>
   )
 }
 
-function CreditInfo() {
+function CreditInfo(props) {
+
+  function update(i, value) {
+    let copy = [...props.credit]; 
+    value = parseInt(value, 10);
+    copy[i] = value;
+    props.setCredit(copy);
+  }
+
   return (
-    <div className="input-container">
-      <Row className="mt-5">
-        <Col><p>기초교양</p><input type="number" className="credit-input"/></Col>
-        <Col><p>균형교양</p><input type="number" className="credit-input"/></Col>
-      </Row>
-      <Row className="mt-5">
-        <Col><p>학문기초</p><input type="number" className="credit-input"/></Col>
-        <Col><p>전공필수</p><input type="number" className="credit-input"/></Col>
-      </Row>
-      <Row className="mt-5">
-        <Col><p>전공선택</p><input type="number" className="credit-input"/></Col>
-        <Col><p>자유선택</p><input type="number" className="credit-input"/></Col>
-      </Row>
-    </div>
+    <>
+      <div className="text-box mt-4">
+        <h5>이수학점 입력</h5>
+      </div>
+      <div className="input-container">
+        <Row>
+          <Col><p>기초교양</p><input type="number" className="credit-input" onChange={(e) => { update(0, e.target.value)}}/></Col>
+          <Col><p>균형교양</p><input type="number" className="credit-input" onChange={(e) => { update(1, e.target.value)}}/></Col>
+        </Row>
+        <Row className="mt-4">
+          <Col><p>학문기초</p><input type="number" className="credit-input" onChange={(e) => { update(2, e.target.value)}}/></Col>
+          <Col><p>전공필수</p><input type="number" className="credit-input" onChange={(e) => { update(3, e.target.value)}}/></Col>
+        </Row>
+        <Row className="mt-4">
+          <Col><p>전공선택</p><input type="number" className="credit-input" onChange={(e) => { update(4, e.target.value)}}/></Col>
+          <Col><p>자유선택</p><input type="number" className="credit-input" onChange={(e) => { update(6, e.target.value)}}/></Col>
+        </Row>
+      </div>
+      <div className="text-box mt-5">
+        <h6 className="mt-4">이수학점 확인 방법</h6>
+        <h6>
+          K클라우드 로그인(<a href="https://kcloud.kangwon.ac.kr" target="_blank" rel="noopener noreferrer">https://kcloud.kangwon.ac.kr</a>)<br/>
+          학생정보조회 - 성적정보 - 성적확인부
+        </h6>
+      </div>
+    </>
+  )
+}
+
+function Checklist() {
+  return (
+    <>
+      <div className="radio">
+        <p>캡스톤프로젝트 참여 여부</p>
+        <div></div>
+      </div>
+    </>
+  )
+}
+
+function ResultPage(props) {
+  return (
+    <>
+      <ProgressBar striped variant="info" now={20} />
+      <div className="result-box mt-4">
+        <p>졸업학점</p>
+        <table>
+          <tr>
+            <th>이수구분</th>
+            <th>인정학점</th>
+            <th>필요학점</th>
+          </tr>
+          {
+            props.result.map(function(data, i) {
+              return (
+                <tr key={ i }>
+                  <td>{props.titleList[i]}</td>
+                  <td className="user-credit">{data}</td>
+                  <td>{props.require[i]}</td>
+                </tr>
+              )
+            })
+          }
+        </table>
+      </div>
+    </>
   )
 }
 

@@ -72,9 +72,10 @@ nav {
   font-size: 1.3rem;
 }
 
-/* .page-list div:hover {
-  border-bottom: 0.2rem solid #B3C8CF;
-} */
+.active {
+  /* font-weight: bold; */
+  border-bottom: 0.2rem solid #FFC55A;
+}
 
 Link {
     text-decoration: none;

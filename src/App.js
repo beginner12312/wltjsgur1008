@@ -4,6 +4,7 @@ import InputForm from './components/InputForm.js';
 import Forum from './pages/Forum.js';
 
 function App() {
+
     return(
         <div>
             <Nav />
