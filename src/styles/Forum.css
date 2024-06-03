@@ -1,0 +1,41 @@
+.forum {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.forum h4 {
+  margin-bottom: 20px;
+}
+
+.forum .button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.forum table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white; /* 테이블 배경을 흰색으로 설정 */
+}
+
+.forum table th, .forum table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.forum table th {
+  background-color: #f2f2f2;
+}
+
+.forum .btn-danger {
+  margin: 0;
+  padding: 5px 10px;
+}
+
+.forum .table-container {
+  padding-bottom: 50px; /* 원하는 높이로 설정 */
+  background-color: white; /* 빈 공간을 흰색으로 설정 */
+}

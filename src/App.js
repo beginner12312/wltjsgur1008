@@ -1,20 +1,38 @@
-import { Router, Routes, Route } from 'react-router-dom';
-import Nav from './components/Nav.js';
-import InputForm from './components/InputForm.js';
-import Forum from './pages/Forum.js';
+import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Nav from './components/Nav';
+import Main from './pages/Main'; // Main 페이지를 import합니다.
+import Forum from './pages/Forum';
+import Write from './pages/Write';
+import Register from './components/Register';
+import Login from './components/Login';
+import './styles/App.css';
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
 
-    return(
-        <div>
-            <Nav />
+  const handleLogout = () => {
+    setToken('');
+    localStorage.removeItem('token');
+  };
 
-            <Routes>
-                <Route path='/' element={<InputForm />} />
-                <Route path='/forum' element={<Forum />} />
-            </Routes>
-        </div>
-    )
+  return (
+    <div>
+      <Nav token={token} handleLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<Main />} /> {/* 메인 페이지 라우팅 설정 */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/forum" element={<Forum />} />
+        <Route
+          path="/write"
+          element={
+            token ? <Write /> : <Navigate to="/login" state={{ from: { pathname: '/write' } }} />
+          }
+        />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
