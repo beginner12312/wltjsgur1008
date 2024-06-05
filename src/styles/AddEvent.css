@@ -1,0 +1,56 @@
+.form-container {
+  max-width: 500px; 
+  margin: 50px auto; 
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  text-align: center; 
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-container form > div {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-container input[type="text"],
+.form-container input[type="datetime-local"] {
+  width: calc(100% - 20px); 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.form-container button {
+  background-color: #007bff; 
+  color: white; 
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%; 
+  max-width: 150px; 
+}
+
+.form-container button:hover {
+  background-color: #0056b3; 
+}

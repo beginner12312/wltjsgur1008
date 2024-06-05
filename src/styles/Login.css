@@ -23,7 +23,7 @@
   }
   
   .login-form .form-group input::placeholder {
-    color: rgba(0, 0, 0, 0.5); /* 반투명한 글자색 */
+    color: rgba(0, 0, 0, 0.5); 
   }
   
   .button-group {
@@ -33,9 +33,9 @@
   
   .button-group .btn {
     flex: 1;
-    margin-right: 10px; /* 버튼 간격 추가 */
+    margin-right: 10px; 
   }
   
   .button-group .btn:last-child {
-    margin-right: 0; /* 마지막 버튼의 오른쪽 마진 제거 */
+    margin-right: 0; 
   }

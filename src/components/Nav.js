@@ -1,33 +1,52 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import '../styles/Nav.css';
 
 function Nav({ token, handleLogout }) {
+  const location = useLocation();
+  const [curPage, setCurPage] = useState(0);
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/':
+        setCurPage(0);
+        break;
+      case '/forum':
+        setCurPage(1);
+        break;
+      case '/calendar':
+        setCurPage(2);
+        break;
+      default:
+        setCurPage(-1);
+    }
+  }, [location.pathname]);
+
   return (
     <nav>
       <div className="logo">
-        <img src={process.env.PUBLIC_URL + '/images/Nav/logo.png'} alt="Logo" />
+        <img src={process.env.PUBLIC_URL + '/images/Nav/logo.png'} alt="GraduKNU Logo" />
         <p>GraduKNU</p>
       </div>  
       <div className="page-list">
         <ul>
-          <div><li><Link to="/" className="nav-link">졸업 요건</Link></li></div> {/* 메인 페이지 링크 수정 */}
-          <div><li><Link to="/forum" className="nav-link">게시판</Link></li></div>
-          <div><li><Link to="/calander" className="nav-link">캘린더</Link></li></div>
+          <li><Link to={'/'} className={curPage === 0 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>졸업요건</Link></li>
+          <li><Link to={'/forum'} className={curPage === 1 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>게시판</Link></li>
+          <li><Link to={'/calendar'} className={curPage === 2 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>캘린더</Link></li>
         </ul>
       </div>
       <div className="account">
         {!token ? (
           <>
-            <Link to="/register" className="btn color-gr">회원가입</Link>
-            <Link to="/login" className="btn color-sb">로그인</Link>
+            <button className="color-gr"><Link to="/register" style={{ textDecoration: "none", color: "black" }}>회원가입</Link></button>
+            <button className="color-sb"><Link to="/login" style={{ textDecoration: "none", color: "black" }}>로그인</Link></button>
           </>
         ) : (
-          <button className="btn color-red" onClick={handleLogout}>로그아웃</button>
+          <button className="color-red" onClick={handleLogout} style={{ textDecoration: "none", color: "blakc" }}>로그아웃</button>
         )}
       </div>
     </nav>
-  );
-}
+  )
+};
 
 export default Nav;

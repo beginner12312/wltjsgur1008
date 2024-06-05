@@ -1,56 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import '../styles/Write.css';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const ServerURL = 'http://localhost:8000';
-
-function Write() {
+const Write = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const { id } = useParams(); // 수정 시 필요한 게시글 ID
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`http://localhost:8000/api/board/${id}`)
+        .then(response => {
+          setTitle(response.data.title);
+          setContent(response.data.content);
+        })
+        .catch(error => {
+          console.error('Error fetching post:', error);
+        });
+    }
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${ServerURL}/insert`, { title, content }, { withCredentials: true });
-      if (response.status === 200) {
-        alert('글이 성공적으로 작성되었습니다.');
-        navigate('/forum'); // 글 작성 후 게시판으로 이동
+      if (id) {
+        // 수정 기능
+        await axios.put(`http://localhost:8000/api/board/${id}`, { title, content }, { withCredentials: true });
+      } else {
+        // 새 글 작성 기능
+        await axios.post('http://localhost:8000/api/board', { title, content }, { withCredentials: true });
       }
+      navigate('/forum'); // 글 작성 또는 수정 후 게시판으로 리다이렉트
     } catch (error) {
-      console.error('Error occurred:', error);
-      alert('글 작성에 실패했습니다.');
+      console.error('Error submitting post:', error);
     }
   };
 
   return (
-    <div className="write-form">
-      <h4>글쓰기</h4>
+    <div className="form-container">
+      <h2>{id ? '글 수정' : '새 글 작성'}</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div>
           <label>제목</label>
-          <input
-            type="text"
-            className="form-control"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
-        <div className="form-group">
+        <div>
           <label>내용</label>
-          <textarea
-            className="form-control"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
         </div>
-        <button type="submit" className="btn btn-primary">글쓰기</button>
+        <button type="submit">{id ? '수정' : '작성'}</button>
       </form>
     </div>
   );
-}
+};
 
 export default Write;

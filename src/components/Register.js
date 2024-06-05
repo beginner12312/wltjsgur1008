@@ -15,11 +15,11 @@ function Register() {
   const handleRegister = async () => {
     try {
       await axios.post(`${ServerURL}/register`, { username, password, student_id: studentId, birth_date: birthDate });
-      alert('Registration successful');
+      alert('회원가입 완료');
       navigate('/'); // 홈 화면으로 리다이렉션
     } catch (error) {
-      console.error('Error occurred:', error);
-      alert('Registration failed');
+      console.error('에러발생 :', error);
+      alert('회원가입 실패');
     }
   };
 
@@ -28,25 +28,26 @@ function Register() {
       <h4>회원가입</h4>
       <input
         type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        placeholder="학번"
+        value={studentId}
+        onChange={(e) => setStudentId(e.target.value)}
       />
+      
       <input
         type="password"
-        placeholder="Password"
+        placeholder="비밀번호"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <input
         type="text"
-        placeholder="Student ID"
-        value={studentId}
-        onChange={(e) => setStudentId(e.target.value)}
+        placeholder="이름"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="date"
-        placeholder="Birth Date"
+        placeholder="생년월일"
         value={birthDate}
         onChange={(e) => setBirthDate(e.target.value)}
       />

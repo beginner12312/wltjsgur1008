@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import '../styles/Login.css';
 
 const ServerURL = 'http://localhost:8000';
@@ -9,14 +9,16 @@ function Login({ setToken }) {
   const [student_id, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${ServerURL}/login`, { student_id, password }, { withCredentials: true });
+      const response = await axios.post(`${ServerURL}/login`, { student_id, password }, { withCredentials: true });//클라이언트에서 서버로
       if (response.status === 200) {
         setToken(response.data.token);
-        navigate('/');
+        const from = location.state?.from || '/';
+        navigate(from); // 로그인 후 이전 페이지로 리다이렉트
       }
     } catch (error) {
       console.error('Error occurred:', error);

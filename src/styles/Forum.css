@@ -17,7 +17,7 @@
 .forum table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white; /* 테이블 배경을 흰색으로 설정 */
+  background-color: white; 
 }
 
 .forum table th, .forum table td {
@@ -36,6 +36,6 @@
 }
 
 .forum .table-container {
-  padding-bottom: 50px; /* 원하는 높이로 설정 */
-  background-color: white; /* 빈 공간을 흰색으로 설정 */
+  padding-bottom: 50px; 
+  background-color: white; 
 }

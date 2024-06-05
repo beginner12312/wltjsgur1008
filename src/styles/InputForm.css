@@ -105,7 +105,7 @@ table {
 .result-container {
   display: flex;
   justify-content: center;
-  /* place-items: center; */
+  
 }
 
 .result-container>div {
