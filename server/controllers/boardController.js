@@ -14,8 +14,9 @@ exports.listPosts = (req, res) => {
 
 exports.insertPost = (req, res) => {
     const { title, content } = req.body;
-    const sqlQuery = "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) VALUES (?, ?, 'artistJay');";
-    db.query(sqlQuery, [title, content], (err, result) => {
+    const author = req.session.user.username;
+    const sqlQuery = "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) VALUES (?, ?, ?);";
+    db.query(sqlQuery, [title, content, author], (err, result) => {
         if (err) {
             console.error('Error inserting post:', err);
             res.status(500).send(err.message);
@@ -31,6 +32,18 @@ exports.updatePost = (req, res) => {
     db.query(sqlQuery, [title, content, id], (err, result) => {
         if (err) {
             console.error('Error updating post:', err);
+            res.status(500).send(err.message);
+        } else {
+            res.send(result);
+        }
+    });
+};
+
+exports.getPosts = (req, res) => {
+    const sqlQuery = "SELECT BOARD_ID, BOARD_TITLE, REGISTER_ID, DATE_FORMAT(REGISTER_DATE, '%Y-%m-%d') AS REGISTER_DATE FROM BOARD;";
+    db.query(sqlQuery, (err, result) => {
+        if (err) {
+            console.error('Error fetching posts:', err);
             res.status(500).send(err.message);
         } else {
             res.send(result);
