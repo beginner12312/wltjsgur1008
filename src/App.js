@@ -9,7 +9,7 @@ import Login from './components/Login';
 import Calendar from './pages/Calendar';
 import AddEvent from './components/AddEvent'; // 일정 추가 페이지 import
 import './styles/App.css';
-
+import PostDetail from './pages/PostDetail';
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -24,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} /> {/* 메인 페이지 라우팅 설정 */}
         <Route path="/register" element={<Register />} />
+        <Route path="/post/:id" element={<PostDetail />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/write" element={token ? <Write /> : <Login setToken={setToken} />} />

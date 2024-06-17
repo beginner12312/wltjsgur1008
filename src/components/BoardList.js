@@ -1,54 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import '../styles/BoardList.css';
 
-const ServerURL = 'http://localhost:8000';
+const BoardList = () => {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
-function BoardList({ posts = [], fetchPosts }) {
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/board');
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.post(`${ServerURL}/api/board/delete`, { id }, { withCredentials: true });
-      fetchPosts();
-    } catch (error) {
-      console.error('Error occurred:', error);
+    if (window.confirm('삭제하시겠습니까?')) {
+      try {
+        await axios.delete(`http://localhost:8000/api/board/${id}`);
+        fetchPosts(); // 삭제 후 게시물 목록 다시 불러오기
+      } catch (error) {
+        console.error('Error deleting post:', error);
+      }
     }
   };
 
   return (
-    <div className="board-list mt-4">
-      <table className="table">
+    <div className="board-list">
+      <h1>자유게시판</h1>
+      <table>
         <thead>
           <tr>
-            <th>No</th>
+            <th>번호</th>
             <th>제목</th>
-            <th>글쓴이</th>
-            <th>작성시간</th>
+            <th>작성자</th>
+            <th>작성일</th>
             <th>삭제</th>
           </tr>
         </thead>
         <tbody>
-          {posts.length > 0 ? (
-            posts.map((post, index) => (
-              <tr key={post.BOARD_ID}>
-                <td>{posts.length - index}</td>
-                <td>{post.BOARD_TITLE}</td>
-                <td>{post.REGISTER_ID}</td>
-                <td>{post.REGISTER_DATE}</td>
-                <td>
-                  <button className="btn btn-danger" onClick={() => handleDelete(post.BOARD_ID)}>삭제</button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5">게시글이 없습니다.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+        {posts.map((post) => (
+                        <tr key={post.BOARD_ID}>
+                            <td>{post.BOARD_ID}</td>
+                            <td>
+                                <Link to={`/post/${post.BOARD_ID}`}>{post.BOARD_TITLE}</Link>
+                            </td>
+                            <td>{post.REGISTER_ID}</td>
+                            <td>{post.REGISTER_DATE}</td>
+                            <td>
+                                <button onClick={() => handleDelete(post.BOARD_ID)}>삭제</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <Link to="/write">
+                <button>글쓰기</button>
+            </Link>
+        </div>
+    );
+};
 
 export default BoardList;
