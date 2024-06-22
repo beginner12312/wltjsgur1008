@@ -7,6 +7,7 @@ const ServerURL = 'http://localhost:8000';
 
 function Forum() {
   const [posts, setPosts] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -20,7 +21,17 @@ function Forum() {
       }
     };
 
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axios.get(`${ServerURL}/api/user/current`, { withCredentials: true });
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+
     fetchPosts();
+    fetchCurrentUser();
   }, []);
 
   const handleDelete = async (id) => {
@@ -41,7 +52,9 @@ function Forum() {
         <Link to="/write" className="btn btn-primary">글쓰기</Link>
       </div>
       <div className="table-container">
-        <table className="table table-bordered">
+        <table className="table 
+        
+        table-bordered">
           <thead>
             <tr>
               <th>번호</th>
@@ -55,17 +68,19 @@ function Forum() {
             {posts.map((post, index) => (
               <tr key={post.id}>
                 <td>{index + 1}</td>
-                <td>{post.title}</td>
+                <td><Link to={`/post/${post.id}`}>{post.title}</Link></td>
                 <td>{post.author}</td>
                 <td>{post.created_at}</td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(post.id)}
-                  >
-                    삭제
+                {currentUser && post.author_id === currentUser.student_id && (
+                  <td>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(post.id)}
+                    >
+                      삭제
                   </button>
                 </td>
+                )}
               </tr>
             ))}
           </tbody>

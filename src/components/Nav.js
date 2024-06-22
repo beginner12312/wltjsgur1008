@@ -8,7 +8,7 @@ function Nav({ token, handleLogout }) {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/':
+      case '/inputform':
         setCurPage(0);
         break;
       case '/forum':
@@ -24,13 +24,15 @@ function Nav({ token, handleLogout }) {
 
   return (
     <nav>
+      <Link to ="/">
       <div className="logo">
         <img src={process.env.PUBLIC_URL + '/images/Nav/logo.png'} alt="GraduKNU Logo" />
         <p>GraduKNU</p>
       </div>  
+      </Link>
       <div className="page-list">
         <ul>
-          <li><Link to={'/'} className={curPage === 0 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>졸업요건</Link></li>
+          <li><Link to={'/inputform'} className={curPage === 0 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>졸업요건</Link></li>
           <li><Link to={'/forum'} className={curPage === 1 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>게시판</Link></li>
           <li><Link to={'/calendar'} className={curPage === 2 ? 'active' : ''} style={{ textDecoration: "none", color: "black" }}>캘린더</Link></li>
         </ul>

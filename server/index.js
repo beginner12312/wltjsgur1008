@@ -9,6 +9,7 @@ const calendarRoutes = require('./routes/calendarRoutes');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
