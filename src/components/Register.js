@@ -14,7 +14,15 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      await axios.post(`${ServerURL}/register`, { username, password, student_id: studentId, birth_date: birthDate });
+      await axios.post(`${ServerURL}/api/user/register`, 
+        { 
+          username, 
+          password, 
+          student_id: studentId, 
+          birth_date: birthDate 
+        }, 
+        { withCredentials: true }
+      );
       alert('회원가입 완료');
       navigate('/'); // 홈 화면으로 리다이렉션
     } catch (error) {
@@ -32,7 +40,6 @@ function Register() {
         value={studentId}
         onChange={(e) => setStudentId(e.target.value)}
       />
-      
       <input
         type="password"
         placeholder="비밀번호"

@@ -57,7 +57,7 @@ function Forum() {
                 <td>{index + 1}</td>
                 <td>{post.title}</td>
                 <td>{post.author}</td>
-                <td>{new Date(post.created_at).toLocaleDateString()}</td>
+                <td>{post.created_at}</td>
                 <td>
                   <button
                     className="btn btn-danger"

@@ -7,7 +7,7 @@ import Write from './pages/Write';
 import Register from './components/Register';
 import Login from './components/Login';
 import Calendar from './pages/Calendar';
-import AddEvent from './components/AddEvent'; // 일정 추가 페이지 import
+import AddEvent from './components/AddEvent'; 
 import './styles/App.css';
 import PostDetail from './pages/PostDetail';
 function App() {
