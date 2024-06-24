@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import '../styles/Nav.css';
 
 function Nav({ token, handleLogout }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [curPage, setCurPage] = useState(0);
 
   useEffect(() => {
@@ -21,6 +22,14 @@ function Nav({ token, handleLogout }) {
         setCurPage(-1);
     }
   }, [location.pathname]);
+
+  function goToSignUp() {
+    navigate("/register");
+  }
+
+  function goToSignIn() {
+    navigate("/login");
+  }
 
   return (
     <nav>
@@ -40,11 +49,16 @@ function Nav({ token, handleLogout }) {
       <div className="account">
         {!token ? (
           <>
-            <button className="color-gr"><Link to="/register" style={{ textDecoration: "none", color: "black" }}>회원가입</Link></button>
-            <button className="color-sb"><Link to="/login" style={{ textDecoration: "none", color: "black" }}>로그인</Link></button>
+            <button className="color-gr" onClick={goToSignUp}>회원가입</button>
+            <button className="color-sb" onClick={goToSignIn}>로그인</button>
           </>
         ) : (
+          <>
+          <Link to="/result" style={{ textDecoration: "none", color: "black" }}>
+          <button className="color-blue">마이페이지</button>
+        </Link>
           <button className="color-red" onClick={handleLogout} style={{ textDecoration: "none", color: "blakc" }}>로그아웃</button>
+          </>
         )}
       </div>
     </nav>

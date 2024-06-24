@@ -1,0 +1,44 @@
+.main {
+    padding: 1rem 2rem;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    text-align: start;
+    border-radius: 1rem;
+}
+
+.introduction-main {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.text-container {
+    margin: 0 auto;
+}
+
+.intro-text {
+    text-align: start;
+}
+
+.mg-left {
+    margin-left: 2rem;
+}
+
+.icon-container>* {
+    text-align: center;
+}
+
+.icon-container p {
+    padding-top: 2.5rem;
+    padding-bottom: 0.5rem;
+    text-align: end;
+    font-size: 1.1rem;
+}
+
+.icons {
+    margin: 3rem auto;
+    padding : 1.2rem 1.5rem;
+    background-color: white;
+    border-radius: 50%;
+}

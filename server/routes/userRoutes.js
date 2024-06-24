@@ -6,6 +6,9 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 router.post('/logout', userController.logout); // 로그아웃 엔드포인트 추가
 router.get('/check-session', userController.checkSession);
+router.post('/save-credits', userController.saveUserCredits); // 새 엔드포인트
+router.get("/get-credits", userController.getUserCredits);
+
 router.get('/current', (req, res) => {
     if (req.session.user) {
         res.json(req.session.user);

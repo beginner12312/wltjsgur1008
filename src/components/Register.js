@@ -19,7 +19,6 @@ function Register() {
           username, 
           password, 
           student_id: studentId, 
-          birth_date: birthDate 
         }, 
         { withCredentials: true }
       );
@@ -51,12 +50,6 @@ function Register() {
         placeholder="이름"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="date"
-        placeholder="생년월일"
-        value={birthDate}
-        onChange={(e) => setBirthDate(e.target.value)}
       />
       <button onClick={handleRegister}>회원가입</button>
     </div>

@@ -11,6 +11,7 @@ import AddEvent from './components/AddEvent';
 import PostDetail from './pages/PostDetail';
 import EditPost from './pages/EditPost';
 import InputForm from './pages/InputForm';
+import Result from './pages/Result';
 import axios from 'axios';
 import './styles/App.css';
 
@@ -40,7 +41,8 @@ function App() {
         <Route path="/post/:id" element={<PostDetail />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/forum" element={<Forum />} />
-        <Route path="/inputform" element={<InputForm />} />
+        <Route path="/inputform" element={<InputForm /> }/>
+        <Route path="/result" element={token ? <Result /> : <Login setToken={setToken} />} />
         <Route path="/write" element={token ? <Write /> : <Login setToken={setToken} />} />
         <Route path="/calendar" element={<Calendar token={token} />} />
         <Route path="/add-event" element={token ? <AddEvent /> : <Login setToken={setToken} />} />
